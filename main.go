@@ -16,9 +16,9 @@ type TracksuitCommand struct {
 	GitHub struct {
 		Token            string `long:"token"             required:"true" description:"GitHub access token"`
 		OrganizationName string `long:"organization-name" required:"true" description:"GitHub organization name"`
-		PersonalRepo     string `long:"Personal-repo"     required:"false" description:"Is it a personal repo, Y or N?"`
+		PersonalRepo     string `long:"Personal-repo"     required:"false" description:"Is it a personal repo, if so set to Y"`
 
-		Repositories []string `long:"repository" desciption:"Repository to sync. Can be repeated to sync many repositories. If omitted, all repositories are synced."`
+		Repositories []string `long:"repository" description:"Repository to sync. Can be repeated to sync many repositories. If omitted, all repositories are synced."`
 	} `group:"GitHub Configuration" namespace:"github"`
 
 	Tracker struct {
@@ -47,6 +47,7 @@ func (cmd *TracksuitCommand) Execute(argv []string) error {
 
 		OrganizationName: cmd.GitHub.OrganizationName,
 		Repositories:     cmd.GitHub.Repositories,
+		PersonalRepo:			cmd.GitHub.PersonalRepo,
 
 		AdditionalLabels: cmd.AdditionalLabels,
 	}

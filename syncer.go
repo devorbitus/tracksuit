@@ -49,6 +49,7 @@ type Syncer struct {
 
 	OrganizationName string
 	Repositories     []string
+	PersonalRepo		 string
 
 	AdditionalLabels map[string]string
 

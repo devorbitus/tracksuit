@@ -7,18 +7,23 @@ import (
 )
 
 var publicReposFilter = github.RepositoryListByOrgOptions{Type: "public"}
+var userPublicReposFilter = github.RepositoryListOptions{Type: "public"}
+
 var openIssuesFilter = github.IssueListByRepoOptions{State: "open"}
 
 func (syncer *Syncer) reposToSync() ([]*github.Repository, error) {
 	options := publicReposFilter
+	personal_options := userPurblicReposFilter
 
 	var repos []*github.Repository
 
 	for {
-		resources, resp, err := syncer.GithubClient.Repositories.ListByOrg(
+		// if PersonalRepo flag is set to 'Y' then
+		if syncer.PersonalRepo == "Y" {
+			resources, resp, err := syncer.GithubClient.Repositories.List(
 			context.TODO(),
 			syncer.OrganizationName,
-			&options,
+			&personal_options,
 		)
 		if err != nil {
 			return nil, err
@@ -38,11 +43,39 @@ func (syncer *Syncer) reposToSync() ([]*github.Repository, error) {
 			break
 		}
 
-		options.ListOptions.Page = resp.NextPage
+		personal_options.ListOptions.Page = resp.NextPage
+
+		} else {
+			resources, resp, err := syncer.GithubClient.Repositories.ListByOrg(
+				context.TODO(),
+				syncer.OrganizationName,
+				&options,
+			)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(resources) == 0 {
+				break
+			}
+
+			for _, repo := range resources {
+				if syncer.shouldSync(repo) {
+					repos = append(repos, repo)
+				}
+			}
+
+			if resp.NextPage == 0 {
+				break
+			}
+
+			options.ListOptions.Page = resp.NextPage
+		}
 	}
 
 	return repos, nil
 }
+
 
 func (syncer *Syncer) shouldSync(repository *github.Repository) bool {
 	if len(syncer.Repositories) == 0 {
