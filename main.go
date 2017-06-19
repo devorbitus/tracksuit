@@ -16,6 +16,7 @@ type TracksuitCommand struct {
 	GitHub struct {
 		Token            string `long:"token"             required:"true" description:"GitHub access token"`
 		OrganizationName string `long:"organization-name" required:"true" description:"GitHub organization name"`
+		PersonalRepo     string `long:"Personal-repo"     required:"false" description:"Is it a personal repo, Y or N?"`
 
 		Repositories []string `long:"repository" desciption:"Repository to sync. Can be repeated to sync many repositories. If omitted, all repositories are synced."`
 	} `group:"GitHub Configuration" namespace:"github"`
