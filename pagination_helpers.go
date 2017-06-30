@@ -21,29 +21,29 @@ func (syncer *Syncer) reposToSync() ([]*github.Repository, error) {
 		// if PersonalRepo flag is set to 'Y' then
 		if syncer.PersonalRepo == "Y" {
 			resources, resp, err := syncer.GithubClient.Repositories.List(
-			context.TODO(),
-			syncer.OrganizationName,
-			&personal_options,
-		)
-		if err != nil {
-			return nil, err
-		}
-
-		if len(resources) == 0 {
-			break
-		}
-
-		for _, repo := range resources {
-			if syncer.shouldSync(repo) {
-				repos = append(repos, repo)
+				context.TODO(),
+				syncer.OrganizationName,
+				&personal_options,
+			)
+			if err != nil {
+				return nil, err
 			}
-		}
 
-		if resp.NextPage == 0 {
-			break
-		}
+			if len(resources) == 0 {
+				break
+			}
 
-		personal_options.ListOptions.Page = resp.NextPage
+			for _, repo := range resources {
+				if syncer.shouldSync(repo) {
+					repos = append(repos, repo)
+				}
+			}
+
+			if resp.NextPage == 0 {
+				break
+			}
+
+			personal_options.ListOptions.Page = resp.NextPage
 
 		} else {
 			resources, resp, err := syncer.GithubClient.Repositories.ListByOrg(
@@ -75,7 +75,6 @@ func (syncer *Syncer) reposToSync() ([]*github.Repository, error) {
 
 	return repos, nil
 }
-
 
 func (syncer *Syncer) shouldSync(repository *github.Repository) bool {
 	if len(syncer.Repositories) == 0 {
