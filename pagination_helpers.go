@@ -13,7 +13,7 @@ var openIssuesFilter = github.IssueListByRepoOptions{State: "open"}
 
 func (syncer *Syncer) reposToSync() ([]*github.Repository, error) {
 	options := publicReposFilter
-	personal_options := userPurblicReposFilter
+	personal_options := userPublicReposFilter
 
 	var repos []*github.Repository
 
