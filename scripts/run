@@ -5,7 +5,7 @@ set -e -x
 export GOPATH=$PWD/gopath
 export PATH=$GOPATH/bin:$PATH
 
-go install github.com/vito/tracksuit
+go install github.com/devorbitus/tracksuit
 
 export TRACKSUIT_GITHUB_TOKEN=${TRACKSUIT_GITHUB_TOKEN:-$GITHUB_TOKEN}
 export TRACKSUIT_GITHUB_ORGANIZATION_NAME=${TRACKSUIT_GITHUB_ORGANIZATION_NAME:-$ORGANIZATION}
