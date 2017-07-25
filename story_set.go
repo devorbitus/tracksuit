@@ -35,7 +35,7 @@ func (set StorySet) WithLabel(label string) StorySet {
 	var withLabel StorySet
 	for _, story := range set {
 		for _, storyLabel := range story.Labels {
-			if storyLabel.Name == label {
+			if strings.EqualFold(storyLabel.Name, label) {
 				withLabel = append(withLabel, story)
 				break
 			}
